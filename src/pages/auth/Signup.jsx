@@ -1,14 +1,17 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import useAuth from '../../hooks/useAuth';
+import { useNavigate } from 'react-router';
 
 const Signup = () => {
-  const { createUser }=useAuth()
+  const { createUser } = useAuth()
+  const navigate=useNavigate()
   const { handleSubmit, register, } = useForm();
   const handelSignup = data => {
     console.log(data);
     createUser(data.email, data.password).then(user => {
       console.log(user)
+      navigate('/onboarding')
     }).catch(error => {
       console.log(error)
     })

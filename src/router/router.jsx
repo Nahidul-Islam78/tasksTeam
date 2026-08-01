@@ -4,6 +4,7 @@ import HomePage from '../pages/home/HomePage';
 import AuthLayout from '../layout/AuthLayout';
 import Signup from '../pages/auth/Signup';
 import Login from '../pages/auth/Login';
+import Onboarding from '../pages/onboarding/Onboarding';
 export const router = createBrowserRouter([
   {
     path: '/',
@@ -12,6 +13,10 @@ export const router = createBrowserRouter([
       {
         index: true,
         Component:HomePage
+      },
+      {
+        path: 'onboarding',
+        Component:Onboarding
       }
     ]
   },
