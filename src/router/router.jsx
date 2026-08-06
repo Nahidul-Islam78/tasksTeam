@@ -5,6 +5,11 @@ import AuthLayout from '../layout/AuthLayout';
 import Signup from '../pages/auth/Signup';
 import Login from '../pages/auth/Login';
 import Onboarding from '../pages/onboarding/Onboarding';
+import DashboardLayout from '../layout/DashboardLayout';
+import Dashboard from '../pages/dashboard/Dashboard';
+import Workspace from '../pages/dashboard/Workspace';
+import Project from '../pages/dashboard/Project';
+import ProjectKanbanBoard from '../pages/dashboard/projectKanbanBoard';
 export const router = createBrowserRouter([
   {
     path: '/',
@@ -12,13 +17,9 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        Component:HomePage
+        Component: HomePage,
       },
-      {
-        path: 'onboarding',
-        Component:Onboarding
-      }
-    ]
+    ],
   },
   {
     path: 'auth',
@@ -26,12 +27,38 @@ export const router = createBrowserRouter([
     children: [
       {
         path: 'sign-up',
-        Component:Signup
+        Component: Signup,
       },
       {
         path: 'login',
-        Component:Login
+        Component: Login,
+      },
+    ],
+  },
+  {
+    path: '/',
+    Component: DashboardLayout,
+    children: [
+      {
+        path:'dashboard',
+        Component:Dashboard
+      },
+      {
+        path: 'workspace',
+        Component:Workspace
+      },
+      {
+        path: 'project',
+        Component:Project
+      },
+      {
+        path: '/projects/:id',
+        Component:ProjectKanbanBoard
       }
     ]
-  }
+  },
+  {
+    path: 'onboarding',
+    Component: Onboarding,
+  },
 ]);

@@ -2,16 +2,21 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import useAuth from '../../hooks/useAuth';
 import { useNavigate } from 'react-router';
+import useAxios from '../../hooks/useAxios';
 
 const Signup = () => {
-  const { createUser } = useAuth()
-  const navigate=useNavigate()
+  const { createUser } = useAuth();
+  const navigate = useNavigate();
+  const axios = useAxios();
   const { handleSubmit, register, } = useForm();
+  
   const handelSignup = data => {
-    console.log(data);
+   
     createUser(data.email, data.password).then(user => {
-      console.log(user)
-      navigate('/onboarding')
+      axios.post(`/users`, data).then(res => {
+        console.log(res);
+      })
+      navigate('/onboarding');
     }).catch(error => {
       console.log(error)
     })
