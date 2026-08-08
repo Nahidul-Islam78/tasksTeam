@@ -24,7 +24,7 @@ const CreateWorkSpaceStep = ({ next,setWorkspaceId}) => {
   const createWorkSpace = () => {
     const workspace = {
       name: workSpaceRef.current.value,
-      ownerId:ownerInfo._id,
+      ownerId:ownerInfo._id, 
       ownerEmail: ownerInfo.email
     };
     axios.post('/workspaces', workspace).then(res => {

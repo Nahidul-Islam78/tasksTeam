@@ -9,7 +9,9 @@
     "id": "progress",
     "title": "In Progress",
     "projectId": "",
-    "tasks": []
+    "tasks": [
+      
+    ]
   },
   {
     "id": "review",

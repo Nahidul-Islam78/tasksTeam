@@ -7,9 +7,11 @@ import Login from '../pages/auth/Login';
 import Onboarding from '../pages/onboarding/Onboarding';
 import DashboardLayout from '../layout/DashboardLayout';
 import Dashboard from '../pages/dashboard/Dashboard';
-import Workspace from '../pages/dashboard/Workspace';
+import Workspace from '../pages/dashboard/Workspaces';
 import Project from '../pages/dashboard/Project';
 import ProjectKanbanBoard from '../pages/dashboard/projectKanbanBoard';
+import SingleWorkspace from '../pages/dashboard/SingleWorkspace';
+import InviteAccept from '../pages/invite/InviteAccept';
 export const router = createBrowserRouter([
   {
     path: '/',
@@ -40,25 +42,33 @@ export const router = createBrowserRouter([
     Component: DashboardLayout,
     children: [
       {
-        path:'dashboard',
-        Component:Dashboard
+        path: 'dashboard',
+        Component: Dashboard,
       },
       {
         path: 'workspace',
-        Component:Workspace
+        Component: Workspace,
+      },
+      {
+        path: 'workspaces/:id',
+        Component: SingleWorkspace,
       },
       {
         path: 'project',
-        Component:Project
+        Component: Project,
       },
       {
-        path: '/projects/:id',
-        Component:ProjectKanbanBoard
-      }
-    ]
+        path: 'projects/:id',
+        Component: ProjectKanbanBoard,
+      },
+    ],
   },
   {
     path: 'onboarding',
     Component: Onboarding,
+  },
+  {
+    path: 'invite/:token',
+    Component: InviteAccept,
   },
 ]);

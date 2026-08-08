@@ -3,12 +3,14 @@ import React, { useRef, useState } from 'react';
 import { useParams } from 'react-router';
 import useAxios from '../../hooks/useAxios';
 
+
 const ProjectKanbanBoard = () => {
+  const [columnId,setColumnId]=useState(null)
   const { id } = useParams();
   const axios = useAxios();
   const modalRef = useRef();
   //get columns
-  const { data: columnsData = [] } = useQuery({
+  const { data: columnsData = [],refetch } = useQuery({
     queryKey: ['columns', id],
     queryFn: async () => {
       const res = await axios.get(`/columns/${id}`);
@@ -26,9 +28,28 @@ const ProjectKanbanBoard = () => {
   //handel added new task
 
   const handelAddTask = columnId => {
-    console.log(columnId);
-    modalRef.current.showModal();
-  };
+   
+    modalRef.current.showModal()
+    setColumnId(columnId)
+  }
+  const handelTask=(e)=>{
+    e.preventDefault();
+    const title = e.target.title.value;
+    const taskData = {
+      title,
+      columnId,
+      projectId:id
+    }
+    axios.post('/tasks', taskData).then(res => {
+      if (res.data.insertedId) {
+        axios.patch(`/columns/${columnId}`, taskData).then(res => {
+          refetch();
+        });
+      }
+    })
+    
+   
+  }
 
   return (
     <div className="min-h-screen bg-slate-100 p-6">
@@ -54,7 +75,6 @@ const ProjectKanbanBoard = () => {
                 {column.tasks.length}
               </span>
             </div>
-
             {/* Add Task */}
             <button
               className="mb-4 w-full rounded-lg border border-dashed border-slate-300 py-2 text-sm text-slate-500 hover:bg-slate-100"
@@ -62,6 +82,7 @@ const ProjectKanbanBoard = () => {
             >
               + Add Task
             </button>
+
             {/* Tasks */}
             <div className="space-y-3">
               {column.tasks.map(task => (
@@ -100,18 +121,18 @@ const ProjectKanbanBoard = () => {
           </div>
         ))}
       </div>
-
-      <dialog
-        ref={modalRef}
-        id="my_modal_5"
-        className="modal modal-bottom sm:modal-middle"
-      >
+      {/*click +Add Task button open modal */}
+      <dialog ref={modalRef} id="my_modal_5" className="modal modal-bottom sm:modal-middle">
         <div className="modal-box">
           <h3 className="font-bold text-lg">Hello!</h3>
           <p className="py-4">
             Press ESC key or click the button below to close
           </p>
           <div className="modal-action">
+            <form onSubmit={handelTask}>
+              <input type="text" name='title' placeholder='title' />
+              <button type='submit' className='btn '>Add</button>
+            </form>
             <form method="dialog">
               {/* if there is a button in form, it will close the modal */}
               <button className="btn">Close</button>
