@@ -1,8 +1,17 @@
 import React from 'react';
 import Logo from './Logo';
 import { Link } from 'react-router';
+import useAuth from '../hooks/useAuth';
 
 const Naver = () => {
+  const { user, logoutUser } = useAuth();
+  const handelLogout = () => {
+    logoutUser().then(() => {
+      
+    }).catch(error=>{
+      console.log(error);
+    })
+  }
   return (
     <div>
       <div className="navbar text-[#ffffff]">
@@ -65,11 +74,20 @@ const Naver = () => {
           </ul>
         </div>
         <div className="navbar-end">
-          <Link to={'/auth/login'} className="btn mr-2">Login</Link>
-          <Link to={'/auth/sign-up'} className="btn">Get Free</Link>
+          {user ? (
+            <button onClick={handelLogout} className="btn  mr-2">Logout</button>
+          ) : (
+            <Link to={'/auth/login'} className="btn mr-2">
+              Login
+            </Link>
+          )}
+          {!user && (
+            <Link to={'/auth/sign-up'} className="btn">
+              Get Free
+            </Link>
+          )}
         </div>
       </div>
-      
     </div>
   );
 };

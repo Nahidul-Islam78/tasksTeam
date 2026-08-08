@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { auth } from '../firebase/firebase.init';
-import { createUserWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+import { createUserWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth';
 import { signInWithEmailAndPassword } from 'firebase/auth/cordova';
 
 const AuthProvider = ({ children }) => {
@@ -10,9 +10,17 @@ const AuthProvider = ({ children }) => {
   const createUser = (email, password) => {
     return createUserWithEmailAndPassword(auth, email, password);
   }
+  //user login
   const loginUser = (email, password) => {
     return signInWithEmailAndPassword(auth, email, password);
   }
+
+  //user logout
+
+  const logoutUser = () => {
+    return signOut(auth);
+  }
+  
   //set observer
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, currentUser => {
@@ -26,6 +34,7 @@ const AuthProvider = ({ children }) => {
   const data = {
     createUser,
     loginUser,
+    logoutUser,
     user
   }
   
