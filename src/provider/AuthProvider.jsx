@@ -5,19 +5,23 @@ import { createUserWithEmailAndPassword, onAuthStateChanged, signOut } from 'fir
 import { signInWithEmailAndPassword } from 'firebase/auth/cordova';
 
 const AuthProvider = ({ children }) => {
-  const [user,setUser]=useState(null)
+  const [user, setUser] = useState(null);
+  const [loading,setLoading]=useState(false)
   //user signup
   const createUser = (email, password) => {
+    loading(true)
     return createUserWithEmailAndPassword(auth, email, password);
   }
   //user login
   const loginUser = (email, password) => {
+    loading(true)
     return signInWithEmailAndPassword(auth, email, password);
   }
 
   //user logout
 
   const logoutUser = () => {
+    loading(true)
     return signOut(auth);
   }
   
@@ -25,7 +29,8 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, currentUser => {
       setUser(currentUser)
-      console.log(currentUser)
+      setLoading(false)
+      
     })
     return () => unsubscribe();
   },[])
@@ -35,7 +40,8 @@ const AuthProvider = ({ children }) => {
     createUser,
     loginUser,
     logoutUser,
-    user
+    user,
+    loading
   }
   
   return <AuthContext value={data}>{children}</AuthContext>

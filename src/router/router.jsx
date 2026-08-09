@@ -12,6 +12,7 @@ import Project from '../pages/dashboard/Project';
 import ProjectKanbanBoard from '../pages/dashboard/projectKanbanBoard';
 import SingleWorkspace from '../pages/dashboard/SingleWorkspace';
 import InviteAccept from '../pages/invite/InviteAccept';
+import PrivetRoute from './PrivetRoute';
 export const router = createBrowserRouter([
   {
     path: '/',
@@ -39,11 +40,15 @@ export const router = createBrowserRouter([
   },
   {
     path: '/',
-    Component: DashboardLayout,
+    element: (
+      <PrivetRoute>
+        <DashboardLayout></DashboardLayout>
+      </PrivetRoute>
+    ),
     children: [
       {
         path: 'dashboard',
-        Component: Dashboard,
+        Component:Dashboard
       },
       {
         path: 'workspace',

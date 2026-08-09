@@ -11,7 +11,7 @@ const Login = () => {
   const handelLogin = (data) => {
   
     loginUser(data.email, data.password).then(data => {
-      console.log(data);
+    
       navigate('/dashboard')
     }).catch(error=>{
       console.log(error)
