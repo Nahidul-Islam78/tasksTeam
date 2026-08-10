@@ -1,14 +1,19 @@
 import { useQuery } from '@tanstack/react-query';
 import React, { useRef, useState } from 'react';
-import { useParams } from 'react-router';
+import { useLocation, useParams } from 'react-router';
 import useAxios from '../../hooks/useAxios';
 
 
 const ProjectKanbanBoard = () => {
+  
   const [columnId,setColumnId]=useState(null)
   const { id } = useParams();
+  console.log(id);
   const axios = useAxios();
   const modalRef = useRef();
+  const taskModalRef = useRef();
+  const location = useLocation();
+  const workspaceId = location.state.workspaceId;
   //get columns
   const { data: columnsData = [],refetch } = useQuery({
     queryKey: ['columns', id],
@@ -17,6 +22,15 @@ const ProjectKanbanBoard = () => {
       return res.data;
     },
   });
+  //get workspace members
+  const { data: workspaceMembers = []} = useQuery({
+    queryKey: ['workspaceMembers', workspaceId],
+    queryFn: async () => {
+      const res = await axios.get(`/workspaceMembers/${workspaceId}`);
+      return res.data;
+    },
+  });
+  
 
   //set task priorityColor
   const priorityColor = {
@@ -29,7 +43,7 @@ const ProjectKanbanBoard = () => {
 
   const handelAddTask = columnId => {
    
-    modalRef.current.showModal()
+    taskModalRef.current.showModal();
     setColumnId(columnId)
   }
   const handelTask=(e)=>{
@@ -50,12 +64,31 @@ const ProjectKanbanBoard = () => {
     
    
   }
+  const handelOpenModal = () => {
+    modalRef.current.showModal();
+  }
+
+    const handleAddedMember = async userEmail => {
+      const projectMemberInfo = {
+        projectId: id,
+        userEmail,
+        role: 'member',
+      };
+      await axios
+        .post('/projectMembers/member', projectMemberInfo)
+        .then(res => {
+          console.log(res.data);
+        });
+    };
 
   return (
     <div className="min-h-screen bg-slate-100 p-6">
       {/* Header */}
       <div className="mb-6 flex items-center justify-between">
         <div>
+          <button onClick={handelOpenModal} className="btn btn-primary">
+            Add Member
+          </button>
           <h1 className="text-3xl font-bold">Website Redesign</h1>
           <p className="text-gray-500">
             Manage your project using Kanban Board
@@ -121,8 +154,12 @@ const ProjectKanbanBoard = () => {
           </div>
         ))}
       </div>
-      {/*click +Add Task button open modal */}
-      <dialog ref={modalRef} id="my_modal_5" className="modal modal-bottom sm:modal-middle">
+      {/*task modal */}
+      <dialog
+        ref={taskModalRef}
+        id="my_modal_5"
+        className="modal modal-bottom sm:modal-middle"
+      >
         <div className="modal-box">
           <h3 className="font-bold text-lg">Hello!</h3>
           <p className="py-4">
@@ -130,9 +167,54 @@ const ProjectKanbanBoard = () => {
           </p>
           <div className="modal-action">
             <form onSubmit={handelTask}>
-              <input type="text" name='title' placeholder='title' />
-              <button type='submit' className='btn '>Add</button>
+              <input type="text" name="title" placeholder="title" />
+              <button type="submit" className="btn ">
+                Add
+              </button>
             </form>
+            <form method="dialog">
+              {/* if there is a button in form, it will close the modal */}
+              <button className="btn">Close</button>
+            </form>
+          </div>
+        </div>
+      </dialog>
+      {/*workspace members modal */}
+      <dialog
+        ref={modalRef}
+        id="my_modal_5"
+        className="modal modal-bottom sm:modal-middle"
+      >
+        <div className="modal-box">
+          <div className="overflow-x-auto">
+            <table className="table table-zebra">
+              {/* head */}
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>email</th>
+                  <th>role</th>
+                  <th>action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {workspaceMembers.map(member => (
+                  <tr key={member._id}>
+                    <td>{member.userEmail}</td>
+                    <td>{member.role}</td>
+                    <td>
+                      <button
+                        onClick={() => handleAddedMember(member.userEmail)}
+                      >
+                        Add
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="modal-action">
             <form method="dialog">
               {/* if there is a button in form, it will close the modal */}
               <button className="btn">Close</button>

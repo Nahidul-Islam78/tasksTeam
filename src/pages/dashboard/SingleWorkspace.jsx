@@ -1,12 +1,30 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useParams } from 'react-router';
 import useAxios from '../../hooks/useAxios';
+import useAuth from '../../hooks/useAuth';
+import { useQuery } from '@tanstack/react-query';
 
 const SingleWorkspace = () => {
-  const axios=useAxios()
+ 
+  const { user } = useAuth();
+  const axios = useAxios();
   const { id } = useParams();
-  console.log(id);
+  
   const modalRef = useRef();
+
+  const { data: workspace = {} } = useQuery({
+    queryKey: ['workspace', id],
+   
+    queryFn: async () => {
+      const res =await axios.get(`/workspaces/${id}/singleWorkspace`);
+      return res.data
+    }
+  })
+  console.log(workspace)
+  const existOwner = workspace?.ownerEmail === user?.email;
+ 
+
+  //const existWorkspaceOwner = workspace.ownerEmail===user.email
   const handelOpenModal = () => {
     modalRef.current.showModal();
   }
@@ -21,12 +39,12 @@ const SingleWorkspace = () => {
       role:'member'
     };
     axios.post('/invitations', invitation).then(res => {
-      console.log(res.data);
+  
    })
   };
   return (
     <div>
-      <button onClick={handelOpenModal}>invite member</button>
+      {existOwner && <button onClick={handelOpenModal}>invite member</button>}
 
       <dialog
         ref={modalRef}

@@ -1,5 +1,6 @@
 import React, {  use, useRef } from 'react';
 import useAxios from '../../hooks/useAxios';
+import useAuth from '../../hooks/useAuth';
 ;
 
 const columnsDataPromise = fetch('/columns.json').then(res => res.json());
@@ -7,6 +8,7 @@ const columnsDataPromise = fetch('/columns.json').then(res => res.json());
 const CreateProjectStep = ({ finish, workspaceId }) => {
   const axios=useAxios()
   const columnsData = use(columnsDataPromise);
+  const {user}=useAuth()
 
   const projectRef = useRef();
  
@@ -18,6 +20,17 @@ const CreateProjectStep = ({ finish, workspaceId }) => {
     };
     axios.post('/projects', project).then(res => {
       const projectId = res.data.insertedId;
+      if (projectId) {
+        const projectMember = {
+          projectId: res.data.insertedId,
+          userEmail: user?.email,
+          role: 'admin',
+        };
+        axios.post('/projectMembers',projectMember).then(res => {
+          console.log(res.data);
+        });
+      }
+      //insert  & update columns 
         const updateColumns = columnsData.map(column => ({
           ...column,
           projectId: projectId,

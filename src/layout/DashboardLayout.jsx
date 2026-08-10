@@ -3,8 +3,15 @@ import { BsPersonWorkspace } from 'react-icons/bs';
 import { GoProject } from 'react-icons/go';
 import { MdDashboard } from 'react-icons/md';
 import { NavLink, Outlet } from 'react-router';
+import useAuth from '../hooks/useAuth';
 
 const DashboardLayout = () => {
+  const { loading } = useAuth();
+
+
+  if (loading) {
+    return <span className="loading loading-spinner loading-xl"></span>;
+  }
   return (
     <div>
       <div className="drawer lg:drawer-open">

@@ -6,22 +6,20 @@ import { signInWithEmailAndPassword } from 'firebase/auth/cordova';
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading,setLoading]=useState(false)
+  const [loading,setLoading]=useState(true)
   //user signup
   const createUser = (email, password) => {
-    loading(true)
     return createUserWithEmailAndPassword(auth, email, password);
   }
   //user login
   const loginUser = (email, password) => {
-    loading(true)
+   
     return signInWithEmailAndPassword(auth, email, password);
   }
 
   //user logout
 
   const logoutUser = () => {
-    loading(true)
     return signOut(auth);
   }
   
@@ -35,7 +33,7 @@ const AuthProvider = ({ children }) => {
     return () => unsubscribe();
   },[])
 
-
+  
   const data = {
     createUser,
     loginUser,

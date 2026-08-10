@@ -23,9 +23,7 @@ const Project = () => {
       <ul>
         {projects.map(project => (
           <li key={project._id}>
-            <NavLink to={`/projects/${project._id}`} >
-              {project.name}
-            </NavLink>
+            <NavLink state={{workspaceId:project.workspaceId}} to={`/projects/${project._id}`}>{project.name}</NavLink>
           </li>
         ))}
       </ul>

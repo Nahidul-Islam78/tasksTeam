@@ -21,15 +21,26 @@ const CreateWorkSpaceStep = ({ next,setWorkspaceId}) => {
     }
   })
   
-  const createWorkSpace = () => {
+  const createWorkSpace = async() => {
     const workspace = {
       name: workSpaceRef.current.value,
       ownerId:ownerInfo._id, 
       ownerEmail: ownerInfo.email
     };
-    axios.post('/workspaces', workspace).then(res => {
+    await axios.post('/workspaces', workspace).then(res => {
       setWorkspaceId(res.data.insertedId);
-      next();
+      if (res.data.insertedId) {
+        const workspaceMember = {
+          workspaceId: res.data.insertedId,
+          userEmail: ownerInfo.email,
+          role: 'admin',
+        };
+        axios.post('/workspaceMembers', workspaceMember).then(res => {
+          console.log(res.data);
+          next();
+        })
+      }
+      
     });
   };
   return (
