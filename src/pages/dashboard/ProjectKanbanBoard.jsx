@@ -58,6 +58,7 @@ const ProjectKanbanBoard = () => {
       if (res.data.insertedId) {
         axios.patch(`/columns/${columnId}`, taskData).then(res => {
           refetch();
+          taskModalRef.current.close();
         });
       }
     })
@@ -77,6 +78,7 @@ const ProjectKanbanBoard = () => {
       await axios
         .post('/projectMembers/member', projectMemberInfo)
         .then(res => {
+          modalRef.current.close();
           console.log(res.data);
         });
     };
