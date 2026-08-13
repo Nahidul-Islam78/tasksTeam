@@ -4,6 +4,7 @@ import { GoProject } from 'react-icons/go';
 import { MdDashboard } from 'react-icons/md';
 import { NavLink, Outlet } from 'react-router';
 import useAuth from '../hooks/useAuth';
+import Logo from '../component/Logo';
 
 const DashboardLayout = () => {
   const { loading } = useAuth();
@@ -44,13 +45,17 @@ const DashboardLayout = () => {
                 <path d="M14 10l2 2l-2 2"></path>
               </svg>
             </label>
-            <div className="px-4">Navbar Title</div>
+            <div className="px-4">
+              <NavLink to="/">
+                <Logo></Logo>
+              </NavLink>
+            </div>
           </nav>
           {/* Page content here */}
           <Outlet></Outlet>
         </div>
 
-        <div className="drawer-side is-drawer-close:overflow-visible">
+        <div className="drawer-side ">
           <label
             htmlFor="my-drawer-4"
             aria-label="close sidebar"

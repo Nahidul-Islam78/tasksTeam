@@ -1,6 +1,6 @@
 import React from 'react';
 import Logo from './Logo';
-import { Link } from 'react-router';
+import { Link, NavLink } from 'react-router';
 import useAuth from '../hooks/useAuth';
 
 const Naver = () => {
@@ -53,6 +53,9 @@ const Naver = () => {
               <li>
                 <a>Contact</a>
               </li>
+              <li>
+                {user && <NavLink to="/dashboard">Dashboard</NavLink>}
+              </li>
             </ul>
           </div>
           <Logo></Logo>
@@ -75,7 +78,9 @@ const Naver = () => {
         </div>
         <div className="navbar-end">
           {user ? (
-            <button onClick={handelLogout} className="btn  mr-2">Logout</button>
+            <button onClick={handelLogout} className="btn  mr-2">
+              Logout
+            </button>
           ) : (
             <Link to={'/auth/login'} className="btn mr-2">
               Login
