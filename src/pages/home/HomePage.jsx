@@ -3,6 +3,8 @@ import Hero from '../../component/Hero';
 import Trusted from '../../component/Trusted';
 import useAuth from '../../hooks/useAuth';
 import Features from '../../component/Features';
+import HowItWorks from '../../component/HowItWorks';
+import Pricing from '../../component/Pricing';
 
 
 const HomePage = () => {
@@ -18,6 +20,12 @@ const HomePage = () => {
       </div>
       <div>
         <Features></Features>
+      </div>
+      <div>
+        <HowItWorks></HowItWorks>
+      </div>
+      <div>
+        <Pricing></Pricing>
       </div>
     </div>
   );
