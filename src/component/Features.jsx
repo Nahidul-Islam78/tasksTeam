@@ -7,6 +7,7 @@ import {
   Bell,
 } from 'lucide-react';
 
+
 const features = [
   {
     id: 1,
@@ -57,7 +58,7 @@ const Features = () => {
     <section className="bg-white py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="mx-auto max-w-2xl text-center">
+        <div data-aos="fade-up" className="mx-auto max-w-2xl text-center">
           <span className="inline-block rounded-full bg-indigo-50 px-4 py-1.5 text-sm font-medium text-indigo-600">
             Powerful Features
           </span>
@@ -80,6 +81,7 @@ const Features = () => {
 
             return (
               <div
+                data-aos="fade-up"
                 key={feature.id}
                 className="group rounded-2xl border border-slate-200 bg-white p-7 transition-all duration-300 hover:-translate-y-1 hover:border-indigo-200 hover:shadow-xl"
               >

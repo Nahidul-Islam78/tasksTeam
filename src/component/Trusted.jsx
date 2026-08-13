@@ -12,8 +12,10 @@ import StartPeople from './../assets/brands/start_people.png'
 
 const Trusted = () => {
   return (
-    <div className="text-[#ffffff] my-14">
-      <p className="text-3xl text-center my-6">Trusted by modern teams</p>
+    <div className="text-[#ffffff] my-14 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <p data-aos="fade-up" className="text-3xl text-center my-6">
+        Trusted by modern teams
+      </p>
       <div className=" py-5">
         <Swiper
           slidesPerView={4}

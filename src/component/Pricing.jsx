@@ -51,22 +51,28 @@ const Pricing = () => {
     <section className="bg-white py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="mx-auto max-w-2xl text-center">
+        <div data-aos="fade-up" className="mx-auto max-w-2xl text-center">
           <span className="inline-block rounded-full bg-indigo-50 px-4 py-1.5 text-sm font-medium text-indigo-600">
             Pricing
           </span>
 
-          <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">
+          <h2
+            data-aos="fade-up"
+            className="mt-4 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl"
+          >
             Simple pricing for every team
           </h2>
 
-          <p className="mt-5 text-base leading-7 text-slate-600 sm:text-lg">
+          <p
+            data-aos="fade-up"
+            className="mt-5 text-base leading-7 text-slate-600 sm:text-lg"
+          >
             Start for free and upgrade when your team needs more.
           </p>
         </div>
 
         {/* Pricing Cards */}
-        <div className="mt-14 grid gap-6 lg:grid-cols-3">
+        <div data-aos="fade-up" className="mt-14 grid gap-6 lg:grid-cols-3">
           {plans.map(plan => (
             <div
               key={plan.name}
@@ -137,7 +143,7 @@ const Pricing = () => {
               />
 
               {/* Features */}
-              <div className="space-y-4">
+              <div data-aos="fade-up" className="space-y-4">
                 {plan.features.map(feature => (
                   <div key={feature} className="flex items-start gap-3">
                     <div

@@ -5,6 +5,7 @@ import useAuth from '../../hooks/useAuth';
 import Features from '../../component/Features';
 import HowItWorks from '../../component/HowItWorks';
 import Pricing from '../../component/Pricing';
+import FAQ from '../../component/FAQ';
 
 
 const HomePage = () => {
@@ -26,6 +27,9 @@ const HomePage = () => {
       </div>
       <div>
         <Pricing></Pricing>
+      </div>
+      <div>
+        <FAQ></FAQ>
       </div>
     </div>
   );

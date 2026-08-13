@@ -30,7 +30,7 @@ const HowItWorks = () => {
     <section className="bg-slate-50 py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="mx-auto max-w-2xl text-center">
+        <div data-aos="fade-up" className="mx-auto max-w-2xl text-center">
           <span className="inline-block rounded-full bg-indigo-100 px-4 py-1.5 text-sm font-medium text-indigo-600">
             How It Works
           </span>
@@ -52,7 +52,11 @@ const HowItWorks = () => {
 
           <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
             {steps.map(step => (
-              <div key={step.id} className="relative text-center">
+              <div
+                data-aos="fade-up"
+                key={step.id}
+                className="relative text-center"
+              >
                 {/* Number */}
                 <div className="relative z-10 mx-auto flex h-14 w-14 items-center justify-center rounded-full border-4 border-white bg-indigo-600 text-lg font-bold text-white shadow-md">
                   {step.id}
