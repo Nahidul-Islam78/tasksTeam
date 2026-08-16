@@ -9,7 +9,7 @@ import { FcGoogle } from 'react-icons/fc';
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const { createUser } = useAuth();
+  const { createUser, updateUser } = useAuth();
   const navigate = useNavigate();
   const axios = useAxios();
   const { handleSubmit, register, } = useForm();
@@ -17,10 +17,14 @@ const Signup = () => {
   const handelSignup = data => {
    
     createUser(data.email, data.password).then(user => {
-      axios.post(`/users`, data).then(res => {
-        console.log(res);
+      updateUser({ displayName: data.name, photoURL: null }).then(() => {
+        axios.post(`/users`, data).then(res => {
+          console.log(res);
+        });
+        navigate('/onboarding');
+      }).catch(error => {
+        console.log(error);
       })
-      navigate('/onboarding');
     }).catch(error => {
       console.log(error)
     })

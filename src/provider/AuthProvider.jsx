@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { auth } from '../firebase/firebase.init';
-import { createUserWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth';
-import { signInWithEmailAndPassword } from 'firebase/auth/cordova';
+import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, updateProfile } from 'firebase/auth';
+
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -31,13 +31,20 @@ const AuthProvider = ({ children }) => {
       
     })
     return () => unsubscribe();
-  },[])
+  }, [])
+  
+  //update user profile
+
+  const updateUser = (userInfo) => {
+    return updateProfile(auth.currentUser, userInfo)
+  }
 
   
   const data = {
     createUser,
     loginUser,
     logoutUser,
+    updateUser,
     user,
     loading
   }

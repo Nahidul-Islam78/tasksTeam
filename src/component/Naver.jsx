@@ -13,7 +13,7 @@ const Naver = () => {
     })
   }
   return (
-    <div >
+    <div>
       <div className="navbar text-[#ffffff] mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="navbar-start">
           <div className="dropdown">
@@ -45,15 +45,18 @@ const Naver = () => {
                 <a>Solutions</a>
               </li>
               <li>
-                <a>Pricing</a>
-              </li>
-              <li>
                 <a>About</a>
               </li>
               <li>
                 <a>Contact</a>
               </li>
-              <li>{user && <NavLink to="/dashboard">Dashboard</NavLink>}</li>
+              {user && (
+                <>
+                  <li>
+                    <NavLink to="/dashboard">Dashboard</NavLink>
+                  </li>
+                </>
+              )}
             </ul>
           </div>
           <Logo></Logo>
@@ -72,6 +75,13 @@ const Naver = () => {
             <li>
               <a>Contact</a>
             </li>
+            {user && (
+              <>
+                <li>
+                  <NavLink to="/dashboard">Dashboard</NavLink>
+                </li>
+              </>
+            )}
           </ul>
         </div>
         <div className="navbar-end">
