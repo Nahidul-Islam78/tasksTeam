@@ -20,7 +20,6 @@ const SingleWorkspace = () => {
       return res.data
     }
   })
-  console.log(workspace)
   const existOwner = workspace?.ownerEmail === user?.email;
  
 
@@ -39,7 +38,7 @@ const SingleWorkspace = () => {
       role:'member'
     };
     axios.post('/invitations', invitation).then(res => {
-  
+      modalRef.current.close()
    })
   };
   return (

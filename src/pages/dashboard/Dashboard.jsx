@@ -1,11 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-import React, { use } from 'react';
+import React  from 'react';
 import useAuth from '../../hooks/useAuth';
 import useAxios from '../../hooks/useAxios';
 
 const Dashboard = () => {
   const { user } = useAuth();
-  console.log(user)
   const axios = useAxios();
   const { data: workspaces = [] } = useQuery({
     queryKey: ['workspace', user?.email],
