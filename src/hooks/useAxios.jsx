@@ -1,10 +1,10 @@
 import axios from 'axios';
 import React from 'react';
-const axiosSecure= axios.create({
-  baseURL: `http://localhost:3000`,
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_URL,
 });
 const useAxios = () => {
-  return axiosSecure
+  return api
 };
 
 export default useAxios;
