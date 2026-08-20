@@ -20,11 +20,7 @@ const Footer = () => {
           {/* Brand */}
           <div className="lg:col-span-2">
             <div className="flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-600 font-bold text-white">
-                T
-              </div>
-
-              <span className="text-xl font-bold text-white">TaskFlow</span>
+              <span className="text-xl font-bold text-white">taskTeam</span>
             </div>
 
             <p className="mt-5 max-w-md text-sm leading-6 text-slate-400">

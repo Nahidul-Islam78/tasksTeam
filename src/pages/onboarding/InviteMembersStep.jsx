@@ -15,7 +15,8 @@ const InviteMembersStep = ({ next, workspaceId, workspaceName }) => {
       workspaceName,
       status: 'pending',
       role: 'member',
-      inviterName:user?.displayName
+      inviterName: user?.displayName,
+      inviterEmail:user?.email
     };
     axios.post('/invitations', invitation).then(res => {
       next();

@@ -35,7 +35,9 @@ const SingleWorkspace = () => {
       email,
       workspaceId: id,
       status: 'pending',
-      role:'member'
+      role: 'member',
+      inviterName: user?.displayName,
+      inviterEmail: user?.email,
     };
     axios.post('/invitations', invitation).then(res => {
       modalRef.current.close()
