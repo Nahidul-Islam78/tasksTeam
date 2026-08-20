@@ -11,6 +11,7 @@ const SingleWorkspace = () => {
   const { id } = useParams();
   
   const modalRef = useRef();
+  console.log(id)
 
   const { data: workspace = {} } = useQuery({
     queryKey: ['workspace', id],

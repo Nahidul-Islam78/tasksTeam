@@ -1,15 +1,14 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import useAuth from '../../hooks/useAuth';
 import useAxios from '../../hooks/useAxios';
 import { useQuery } from '@tanstack/react-query';
-
-import { Link } from 'react-router';
-import { ArrowRight, Building2, FolderKanban, MoreHorizontal, Plus, Search, Users } from 'lucide-react';
+import { ArrowRight, Building2, FolderPlus, MoreHorizontal, Plus,  X } from 'lucide-react';
 
 const Workspaces = () => {
   const { user } = useAuth();
   const axios = useAxios();
-  const { data: workspaces = [] } = useQuery({
+  const modalRef=useRef()
+  const { data: workspaces = [] ,refetch:workspaceRefetch} = useQuery({
     queryKey: ['workspace', user?.email],
     enabled: !!user?.email,
     queryFn: async () => {
@@ -17,44 +16,34 @@ const Workspaces = () => {
       return res.data;
     },
   });
-  const workspacess = [
-    {
-      id: 1,
-      name: 'Kakoli',
-      description: 'Main workspace for our team',
-      members: 8,
-      projects: 5,
-      color: 'bg-primary',
-      initials: 'K',
-    },
-    {
-      id: 2,
-      name: 'Development Team',
-      description: 'Software development projects',
-      members: 12,
-      projects: 8,
-      color: 'bg-secondary',
-      initials: 'D',
-    },
-    {
-      id: 3,
-      name: 'Marketing',
-      description: 'Marketing and campaign management',
-      members: 6,
-      projects: 4,
-      color: 'bg-accent',
-      initials: 'M',
-    },
-    {
-      id: 4,
-      name: 'Personal',
-      description: 'Personal projects and tasks',
-      members: 2,
-      projects: 3,
-      color: 'bg-info',
-      initials: 'P',
-    },
-  ];
+
+  const handelOpenModal = () => {
+    modalRef.current.showModal();
+  }
+
+  const handelWorkspaceSubmit = (e) => {
+    e.preventDefault();
+    const form = e.target;
+
+    const workspaceData = {
+      name: form.name.value,
+      ownerEmail: user?.email,
+    };
+     axios.post('/workspaces', workspaceData).then(res => {
+      if (res.data.insertedId) {
+        const workspaceMember = {
+          workspaceId: res.data.insertedId,
+          userEmail: user?.email,
+          role: 'admin',
+        };
+        axios.post('/workspaceMembers', workspaceMember).then(res => {
+          workspaceRefetch();
+          form.reset();
+          modalRef.current?.close();
+        });
+      }
+    });
+}
 
   return (
     <div className="min-h-screen bg-base-200 p-4 md:p-6 lg:p-8">
@@ -73,7 +62,7 @@ const Workspaces = () => {
             </p>
           </div>
 
-          <button className="btn btn-primary gap-2">
+          <button onClick={handelOpenModal} className="btn btn-primary gap-2">
             <Plus size={18} />
             Create Workspace
           </button>
@@ -134,7 +123,10 @@ const Workspaces = () => {
           ))}
 
           {/* Create Workspace Card */}
-          <button className="card  border-2 border-dashed border-base-300 bg-base-100 transition hover:border-primary hover:bg-primary/5">
+          <button
+            onClick={handelOpenModal}
+            className="card  border-2 border-dashed border-base-300 bg-base-100 transition hover:border-primary hover:bg-primary/5"
+          >
             <div className="card-body flex items-center justify-center text-center">
               <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-primary">
                 <Plus size={26} />
@@ -151,6 +143,75 @@ const Workspaces = () => {
           </button>
         </div>
       </div>
+      {/*  workspace modal */}
+
+      <dialog ref={modalRef} className="modal modal-bottom sm:modal-middle">
+        <div className="modal-box w-11/12 max-w-lg rounded-2xl p-6">
+          {/* Header */}
+          <div className="mb-6 flex items-start justify-between">
+            <div className="flex items-center gap-3">
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-indigo-100 text-indigo-600">
+                <FolderPlus size={22} />
+              </div>
+
+              <div>
+                <h3 className="text-xl font-bold text-slate-800">
+                  Create New Workspace
+                </h3>
+
+                <p className="mt-1 text-sm text-slate-500">
+                  Start a new workspace and invite your team members.
+                </p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => modalRef.current?.close()}
+              className="btn btn-circle btn-ghost btn-sm"
+            >
+              <X size={18} />
+            </button>
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handelWorkspaceSubmit} className="space-y-5">
+            {/* Project Name */}
+            <div>
+              <label className="mb-2 block text-sm font-semibold text-slate-700">
+                Workspace Name
+              </label>
+
+              <input
+                type="text"
+                name="name"
+                placeholder="e.g. Website Redesign"
+                className="input input-bordered w-full rounded-xl"
+                required
+              />
+            </div>
+            {/* Actions */}
+            <div className="flex items-center justify-end gap-3 border-t border-slate-100 pt-5">
+              <button
+                type="button"
+                onClick={() => modalRef.current?.close()}
+                className="btn btn-ghost"
+              >
+                Cancel
+              </button>
+
+              <button type="submit" className="btn btn-primary px-6">
+                Create Project
+              </button>
+            </div>
+          </form>
+        </div>
+
+        {/* Click outside modal */}
+        <form method="dialog" className="modal-backdrop">
+          <button>close</button>
+        </form>
+      </dialog>
     </div>
   );
 };

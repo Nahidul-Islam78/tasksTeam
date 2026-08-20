@@ -127,7 +127,7 @@ const ProjectKanbanBoard = () => {
         {/* ================= BOARD ================= */}
 
         <div className="overflow-x-auto pb-5">
-          <div className="grid min-w-[1100px] grid-cols-4 gap-5">
+          <div className="grid  grid-cols-4 gap-5">
             {columnsData.map((column, index) => {
               const columnColors = [
                 {
@@ -157,7 +157,7 @@ const ProjectKanbanBoard = () => {
               return (
                 <div
                   key={column._id}
-                  className={`flex min-h-[600px] flex-col rounded-2xl border ${color.border} bg-slate-50`}
+                  className={`flex  flex-col rounded-2xl border ${color.border} bg-slate-50`}
                 >
                   {/* ================= COLUMN HEADER ================= */}
 
@@ -260,7 +260,7 @@ const ProjectKanbanBoard = () => {
 
                     {/* Empty State */}
                     {column.tasks.length === 0 && (
-                      <div className="flex min-h-[180px] flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 bg-white/60 px-4 text-center">
+                      <div className="flex  flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 bg-white/60 px-4 text-center">
                         <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-xl">
                           📋
                         </div>

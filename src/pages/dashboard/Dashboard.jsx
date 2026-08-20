@@ -1,14 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
-import React  from 'react';
+import React, { useRef }  from 'react';
 import useAuth from '../../hooks/useAuth';
 import useAxios from '../../hooks/useAxios';
-import { ArrowRight, CheckSquare, FolderKanban,Plus, Users } from 'lucide-react';
+import { ArrowRight,  FolderKanban,FolderPlus,Plus, Users, X } from 'lucide-react';
 import { Link } from 'react-router';
-import { MdWorkspacePremium, MdWorkspaces } from 'react-icons/md';
+import { MdWorkspaces } from 'react-icons/md';
 
 const Dashboard = () => {
   const { user } = useAuth();
   const axios = useAxios();
+  const modalRef = useRef();
 
   //get workspaces
   const { data: workspaces = [] } = useQuery({
@@ -20,7 +21,7 @@ const Dashboard = () => {
     },
   });
   //get projects
-  const { data: projects = [] } = useQuery({
+  const { data: projects = [],refetch:projectRefetch } = useQuery({
     queryKey: ['projects', user?.email],
     enabled: !!user?.email,
     queryFn: async () => {
@@ -29,25 +30,58 @@ const Dashboard = () => {
     },
   });
   // get invitations
-  const { data:invitations=[]} = useQuery({
+  const { data: invitations = [] } = useQuery({
     queryKey: ['invitation', user?.email],
     enabled: !!user?.email,
     queryFn: async () => {
       const res = await axios.get(`/invitations/${user.email}`);
       return res.data;
-    }
-  })
+    },
+  });
 
   //get projects members
-  const { data:projectsMembers } = useQuery({
+  const { data: projectsMembers } = useQuery({
     queryKey: ['projectMembers', user?.email],
     enabled: !!user?.email,
     queryFn: async () => {
       const res = await axios.get(`/projectsMembers/${user.email}`);
       return res.data;
-    }
-  })
+    },
+  });
+  //open modal
+  const handelOpenModal = () => {
+    modalRef.current.showModal();
+  };
 
+  //create project
+
+  const handleProjectSubmit = e => {
+    e.preventDefault();
+    const form = e.target;
+
+    const projectData = {
+      name: form.name.value,
+      workspaceId: form.workspaceId.value,
+      ownerEmail: user?.email,
+    };
+
+    axios.post('/projects', projectData).then(res => {
+      const projectId = res.data.insertedId;
+      if (projectId) {
+        const projectMember = {
+          projectId,
+          userEmail: user?.email,
+          role: 'admin',
+        };
+        axios.post('/projectMembers', projectMember).then(res => {
+         projectRefetch();
+         form.reset();
+         modalRef.current?.close();
+        });
+      }
+      
+    })
+  };
 
   const stats = [
     {
@@ -86,7 +120,7 @@ const Dashboard = () => {
             </p>
           </div>
 
-          <button className="btn btn-primary gap-2">
+          <button onClick={handelOpenModal} className="btn btn-primary gap-2">
             <Plus size={18} />
             Create Project
           </button>
@@ -194,9 +228,7 @@ const Dashboard = () => {
                     key={workspace.name}
                     className="rounded-xl border border-base-300 p-4 transition hover:bg-base-200"
                   >
-                    <Link
-                      to={`/workspaces/${workspace._id}`}
-                    >
+                    <Link to={`/workspaces/${workspace._id}`}>
                       <div className="flex items-start justify-between">
                         <div>
                           <h3 className="font-semibold">{workspace.name}</h3>
@@ -210,8 +242,106 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+
+      {/*  project modal */}
+
+      <dialog ref={modalRef} className="modal modal-bottom sm:modal-middle">
+        <div className="modal-box w-11/12 max-w-lg rounded-2xl p-6">
+          {/* Header */}
+          <div className="mb-6 flex items-start justify-between">
+            <div className="flex items-center gap-3">
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-indigo-100 text-indigo-600">
+                <FolderPlus size={22} />
+              </div>
+
+              <div>
+                <h3 className="text-xl font-bold text-slate-800">
+                  Create New Project
+                </h3>
+
+                <p className="mt-1 text-sm text-slate-500">
+                  Create a project inside your workspace.
+                </p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => modalRef.current?.close()}
+              className="btn btn-circle btn-ghost btn-sm"
+            >
+              <X size={18} />
+            </button>
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handleProjectSubmit} className="space-y-5">
+            {/* Project Name */}
+            <div>
+              <label className="mb-2 block text-sm font-semibold text-slate-700">
+                Project Name
+              </label>
+
+              <input
+                type="text"
+                name="name"
+                placeholder="e.g. Website Redesign"
+                className="input input-bordered w-full rounded-xl"
+                required
+              />
+            </div>
+
+            {/* Workspace */}
+            <div>
+              <label className="mb-2 block text-sm font-semibold text-slate-700">
+                Workspace
+              </label>
+
+              <select
+                name="workspaceId"
+                className="select select-bordered w-full rounded-xl"
+                required
+                defaultValue=""
+              >
+                <option value="" disabled>
+                  Select a workspace
+                </option>
+
+                {workspaces.map(
+                  workspace =>
+                    workspace.ownerEmail === user.email && (
+                      <option key={workspace._id} value={workspace._id}>
+                        {workspace.name}
+                      </option>
+                    ),
+                )}
+              </select>
+            </div>
+
+            {/* Actions */}
+            <div className="flex items-center justify-end gap-3 border-t border-slate-100 pt-5">
+              <button
+                type="button"
+                onClick={() => modalRef.current?.close()}
+                className="btn btn-ghost"
+              >
+                Cancel
+              </button>
+
+              <button type="submit" className="btn btn-primary px-6">
+                Create Project
+              </button>
+            </div>
+          </form>
+        </div>
+
+        {/* Click outside modal */}
+        <form method="dialog" className="modal-backdrop">
+          <button>close</button>
+        </form>
+      </dialog>
     </div>
   );
-};
+};;
 
 export default Dashboard;

@@ -9,7 +9,6 @@ const CreateWorkSpaceStep = ({ next, setWorkspaceId, setWorkspaceName }) => {
   const axios = useAxios();
   const workSpaceRef = useRef();
   const { user } = useAuth();
-
   const { data: ownerInfo } = useQuery({
     queryKey: [user?.email, 'user'],
     enabled: !!user?.email,
@@ -18,13 +17,11 @@ const CreateWorkSpaceStep = ({ next, setWorkspaceId, setWorkspaceName }) => {
       return res.data;
     },
   });
-
   const createWorkSpace = async () => {
     setWorkspaceName(workSpaceRef.current.value);
 
     const workspace = {
       name: workSpaceRef.current.value,
-      ownerId: ownerInfo._id,
       ownerEmail: ownerInfo.email,
     };
     await axios.post('/workspaces', workspace).then(res => {

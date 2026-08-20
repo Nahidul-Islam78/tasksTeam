@@ -1,23 +1,36 @@
 import { useQuery } from '@tanstack/react-query';
-import React from 'react';
+import React, { useRef } from 'react';
 import useAxios from '../../hooks/useAxios';
 import useAuth from '../../hooks/useAuth';
-import { Link, NavLink } from 'react-router';
+import { Link } from 'react-router';
 import {
   ArrowRight,
-  CalendarDays,
-  CheckSquare,
+ 
   FolderKanban,
+  FolderPlus,
   MoreHorizontal,
   Plus,
-  Search,
-  Users,
+  X,
+ 
 } from 'lucide-react';
 
 const Project = () => {
   const { user } = useAuth();
   const axios = useAxios();
-  const { data: projects = [] } = useQuery({
+  const modalRef = useRef();
+  
+    //get workspaces
+    const { data: workspaces = [] } = useQuery({
+      queryKey: ['workspace', user?.email],
+      enabled: !!user?.email,
+      queryFn: async () => {
+        const res = await axios.get(`/workspaces/${user.email}`);
+        return res.data;
+      },
+    });
+
+  //get projects
+  const { data: projects = [],refetch:projectRefetch } = useQuery({
     queryKey: ['projects', user?.email],
     enabled: !!user?.email,
     queryFn: async () => {
@@ -25,62 +38,39 @@ const Project = () => {
       return res.data;
     },
   });
+  //open modal
+  const handelOpenModal = () => {
+    modalRef.current.showModal();
+  };
 
-  const projectss = [
-    {
-      id: 1,
-      name: 'Website Redesign',
-      description: 'Redesign the company website',
-      progress: 65,
-      members: 5,
-      completedTasks: 13,
-      totalTasks: 20,
-      status: 'Active',
-      deadline: 'Aug 30, 2026',
-      color: 'bg-primary',
-      initials: 'WR',
-    },
-    {
-      id: 2,
-      name: 'Mobile Application',
-      description: 'Build a modern mobile application',
-      progress: 40,
-      members: 8,
-      completedTasks: 8,
-      totalTasks: 20,
-      status: 'Active',
-      deadline: 'Sep 15, 2026',
-      color: 'bg-secondary',
-      initials: 'MA',
-    },
-    {
-      id: 3,
-      name: 'Marketing Campaign',
-      description: 'Q3 marketing campaign',
-      progress: 90,
-      members: 6,
-      completedTasks: 18,
-      totalTasks: 20,
-      status: 'Completed',
-      deadline: 'Aug 10, 2026',
-      color: 'bg-accent',
-      initials: 'MC',
-    },
-    {
-      id: 4,
-      name: 'TaskFlow Dashboard',
-      description: 'Build TaskFlow dashboard interface',
-      progress: 55,
-      members: 4,
-      completedTasks: 11,
-      totalTasks: 20,
-      status: 'Active',
-      deadline: 'Sep 05, 2026',
-      color: 'bg-info',
-      initials: 'TD',
-    },
-  ];
+  //create project
 
+  const handleProjectSubmit = e => {
+    e.preventDefault();
+    const form = e.target;
+
+    const projectData = {
+      name: form.name.value,
+      workspaceId: form.workspaceId.value,
+      ownerEmail: user?.email,
+    };
+
+    axios.post('/projects', projectData).then(res => {
+      const projectId = res.data.insertedId;
+      if (projectId) {
+        const projectMember = {
+          projectId,
+          userEmail: user?.email,
+          role: 'admin',
+        };
+        axios.post('/projectMembers', projectMember).then(res => {
+          projectRefetch();
+          form.reset();
+          modalRef.current?.close();
+        });
+      }
+    });
+  };
   return (
     <div className="min-h-screen bg-base-200 p-4 md:p-6 lg:p-8">
       <div className="mx-auto max-w-7xl">
@@ -99,7 +89,7 @@ const Project = () => {
             </p>
           </div>
 
-          <button className="btn btn-primary gap-2">
+          <button onClick={handelOpenModal} className="btn btn-primary gap-2">
             <Plus size={18} />
             Create Project
           </button>
@@ -175,7 +165,10 @@ const Project = () => {
 
           {/* CREATE PROJECT CARD */}
 
-          <button className="card  border-2 border-dashed border-base-300 bg-base-100 transition hover:border-primary hover:bg-primary/5">
+          <button
+            onClick={handelOpenModal}
+            className="card  border-2 border-dashed border-base-300 bg-base-100 transition hover:border-primary hover:bg-primary/5"
+          >
             <div className="card-body flex items-center justify-center text-center">
               <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-primary">
                 <Plus size={27} />
@@ -192,8 +185,106 @@ const Project = () => {
           </button>
         </div>
       </div>
+
+      {/*  project modal */}
+
+      <dialog ref={modalRef} className="modal modal-bottom sm:modal-middle">
+        <div className="modal-box w-11/12 max-w-lg rounded-2xl p-6">
+          {/* Header */}
+          <div className="mb-6 flex items-start justify-between">
+            <div className="flex items-center gap-3">
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-indigo-100 text-indigo-600">
+                <FolderPlus size={22} />
+              </div>
+
+              <div>
+                <h3 className="text-xl font-bold text-slate-800">
+                  Create New Project
+                </h3>
+
+                <p className="mt-1 text-sm text-slate-500">
+                  Create a project inside your workspace.
+                </p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => modalRef.current?.close()}
+              className="btn btn-circle btn-ghost btn-sm"
+            >
+              <X size={18} />
+            </button>
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handleProjectSubmit} className="space-y-5">
+            {/* Project Name */}
+            <div>
+              <label className="mb-2 block text-sm font-semibold text-slate-700">
+                Project Name
+              </label>
+
+              <input
+                type="text"
+                name="name"
+                placeholder="e.g. Website Redesign"
+                className="input input-bordered w-full rounded-xl"
+                required
+              />
+            </div>
+
+            {/* Workspace */}
+            <div>
+              <label className="mb-2 block text-sm font-semibold text-slate-700">
+                Workspace
+              </label>
+
+              <select
+                name="workspaceId"
+                className="select select-bordered w-full rounded-xl"
+                required
+                defaultValue=""
+              >
+                <option value="" disabled>
+                  Select a workspace
+                </option>
+
+                {workspaces.map(
+                  workspace =>
+                    workspace.ownerEmail === user.email && (
+                      <option key={workspace._id} value={workspace._id}>
+                        {workspace.name}
+                      </option>
+                    ),
+                )}
+              </select>
+            </div>
+
+            {/* Actions */}
+            <div className="flex items-center justify-end gap-3 border-t border-slate-100 pt-5">
+              <button
+                type="button"
+                onClick={() => modalRef.current?.close()}
+                className="btn btn-ghost"
+              >
+                Cancel
+              </button>
+
+              <button type="submit" className="btn btn-primary px-6">
+                Create Project
+              </button>
+            </div>
+          </form>
+        </div>
+
+        {/* Click outside modal */}
+        <form method="dialog" className="modal-backdrop">
+          <button>close</button>
+        </form>
+      </dialog>
     </div>
   );
-};
+};;
 
 export default Project;

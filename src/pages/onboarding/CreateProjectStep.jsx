@@ -7,8 +7,6 @@ const CreateProjectStep = ({ finish, workspaceId,}) => {
   const { user } = useAuth();
 
   const projectRef = useRef();
-
-  console.log(workspaceId);
   const createProject = () => {
     const project = {
       name: projectRef.current.value,
