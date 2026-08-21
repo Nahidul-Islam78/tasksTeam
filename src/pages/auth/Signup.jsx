@@ -2,30 +2,35 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import useAuth from '../../hooks/useAuth';
 import { Link, useNavigate } from 'react-router';
-import useAxios from '../../hooks/useAxios';
 import { Eye, EyeOff } from 'lucide-react';
 import Logo from '../../component/Logo';
 import { FcGoogle } from 'react-icons/fc';
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const { createUser, updateUser } = useAuth();
+  const { createUser, updateUser, googleSignin } = useAuth();
   const navigate = useNavigate();
-  const axios = useAxios();
   const { handleSubmit, register, } = useForm();
   
   const handelSignup = data => {
-   
     createUser(data.email, data.password).then(user => {
       updateUser({ displayName: data.name, photoURL: null }).then(() => {
-        axios.post(`/users`, data).then(res => {
-        });
-        navigate('/onboarding');
+       navigate('/onboarding');
+        
       }).catch(error => {
       })
     }).catch(error => {
     })
   }
+
+  const loginWithGoogle = () => {
+    googleSignin()
+      .then(res => {
+        navigate('/dashboard');
+      })
+      .catch(err => {
+      });
+  };
   return (
     <div className="min-h-screen bg-slate-50 px-4 py-10 sm:px-6 lg:px-8">
       <div className="mx-auto flex min-h-[calc(100vh-5rem)] max-w-md items-center justify-center">
@@ -141,6 +146,7 @@ const Signup = () => {
             {/*google*/}
             <div>
               <button
+                onClick={loginWithGoogle}
                 type="button"
                 className="flex w-full items-center justify-center gap-3 rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 mt-3"
               >

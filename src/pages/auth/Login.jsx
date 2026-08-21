@@ -8,7 +8,7 @@ import { FcGoogle } from 'react-icons/fc';
 
 const Login = () => {
 
-  const { loginUser } = useAuth();
+  const { loginUser, googleSignin} = useAuth();
   const { handleSubmit, register } = useForm();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
@@ -21,6 +21,14 @@ const Login = () => {
     }).catch(error=>{
     })
     
+  }
+
+  const loginWithGoogle = () => {
+    googleSignin().then(res => {
+      navigate('/dashboard')
+    }).catch(err => {
+
+    })
   }
   return (
     <div className="min-h-screen bg-slate-50 px-4 py-10 sm:px-6 lg:px-8">
@@ -115,7 +123,7 @@ const Login = () => {
                 </button>
               </form>
               <div>
-                <button
+                <button onClick={loginWithGoogle}
                   type="button"
                   className="flex w-full items-center justify-center gap-3 rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 mt-3"
                 >

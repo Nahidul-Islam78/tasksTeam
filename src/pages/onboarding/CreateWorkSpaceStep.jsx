@@ -9,20 +9,11 @@ const CreateWorkSpaceStep = ({ next, setWorkspaceId, setWorkspaceName }) => {
   const axios = useAxios();
   const workSpaceRef = useRef();
   const { user } = useAuth();
-  const { data: ownerInfo } = useQuery({
-    queryKey: [user?.email, 'user'],
-    enabled: !!user?.email,
-    queryFn: async () => {
-      const res = await axios.get(`/users/${user.email}`);
-      return res.data;
-    },
-  });
   const createWorkSpace = async () => {
     setWorkspaceName(workSpaceRef.current.value);
-
     const workspace = {
       name: workSpaceRef.current.value,
-      ownerEmail: ownerInfo.email,
+      ownerEmail: user?.email,
     };
     await axios.post('/workspaces', workspace).then(res => {
       setWorkspaceId(res.data.insertedId);
@@ -30,7 +21,7 @@ const CreateWorkSpaceStep = ({ next, setWorkspaceId, setWorkspaceName }) => {
       if (res.data.insertedId) {
         const workspaceMember = {
           workspaceId: res.data.insertedId,
-          userEmail: ownerInfo.email,
+          userEmail: user?.email,
           role: 'admin',
         };
         axios.post('/workspaceMembers', workspaceMember).then(res => {

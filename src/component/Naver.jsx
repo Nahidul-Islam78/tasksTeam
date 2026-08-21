@@ -15,7 +15,6 @@ import useAuth from '../hooks/useAuth';
 
 const Naver = () => {
   const { user, logoutUser } = useAuth();
-
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
 
@@ -25,7 +24,7 @@ const Naver = () => {
         setProfileOpen(false);
       })
       .catch(error => {
-        console.log(error);
+
       });
   };
 
@@ -122,7 +121,7 @@ const Naver = () => {
                   <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-lg bg-indigo-500 font-semibold">
                     {user?.photoURL ? (
                       <img
-                        src={user.photoURL}
+                        src={user?.photoURL}
                         alt="Profile"
                         className="h-full w-full object-cover"
                       />

@@ -1,18 +1,13 @@
 import React from 'react';
 import {
   Bell,
-  CalendarDays,
-  ChevronDown,
   LayoutDashboard,
   Menu,
   MessageSquare,
   Search,
-  Settings,
   Users,
   X,
   FolderKanban,
-  CheckSquare,
-  BarChart3,
   LogOut,
 } from 'lucide-react';
 
@@ -57,7 +52,7 @@ const DashboardLayout = () => {
     try {
       await logoutUser();
     } catch (error) {
-      console.log(error);
+      
     }
   };
 
