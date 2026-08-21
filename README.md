@@ -1,16 +1,60 @@
-# React + Vite
+# taskTeam Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+taskTeam is a modern project and task management web application that helps teams organize work, collaborate with team members, manage projects, and track tasks through a Kanban-style workflow.
 
-Currently, two official plugins are available:
+The frontend is built with React and Vite and communicates with the TaskFlow REST API backend.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## 🚀 Live Demo
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+**Live Application**
 
-## Expanding the ESLint configuration
+https://task-team-client.vercel.app
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+**Backend Repository**
+
+https://github.com/Nahidul-Islam78/tasksTeam-server
+
+---
+
+## ✨ Features
+
+-  User authentication
+-  Email & Password Sign In
+-  Google Sign In
+-  User profile
+-  Workspace management
+-  Workspace member management
+-  Project management
+-  Project member management
+-  Kanban board
+-  Task management
+-  Task progress tracking
+-  Workspace invitation
+-  Email invitation system
+-  Invitation link handling
+-  Private routes
+-  Responsive dashboard
+-  Modern and responsive UI
+
+---
+
+## 🛠️ Technologies
+
+### Frontend
+
+- React
+- Vite
+- React Router
+- Tailwind CSS
+- DaisyUI
+- Firebase Authentication
+- Axios
+- TanStack React Query
+- React Icons
+- Lucide React
+- Swiper
+- AOS
+
+---
