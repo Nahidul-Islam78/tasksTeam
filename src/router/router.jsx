@@ -9,7 +9,6 @@ import DashboardLayout from '../layout/DashboardLayout';
 import Dashboard from '../pages/dashboard/Dashboard';
 import Project from '../pages/dashboard/Project';
 import ProjectKanbanBoard from '../pages/dashboard/ProjectKanbanBoard';
-import SingleWorkspace from '../pages/dashboard/SingleWorkspace';
 import InviteAccept from '../pages/invite/InviteAccept';
 import PrivetRoute from './PrivetRoute';
 import Workspaces from '../pages/dashboard/Workspaces';

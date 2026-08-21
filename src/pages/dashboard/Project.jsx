@@ -112,7 +112,7 @@ const Project = () => {
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
           {projects.map(project => (
             <div
-              key={project.id}
+              key={project._id}
               className="group card border border-base-300 bg-base-100 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md"
             >
               <div className="card-body">

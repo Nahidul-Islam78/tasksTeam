@@ -1,4 +1,5 @@
 import { Check } from 'lucide-react';
+import { Link } from 'react-router';
 
 const plans = [
   {
@@ -125,7 +126,8 @@ const Pricing = () => {
               </div>
 
               {/* Button */}
-              <button
+              <Link
+                to='auth/sign-up'
                 className={`mt-8 w-full rounded-lg px-5 py-3 text-sm font-semibold transition ${
                   plan.popular
                     ? 'bg-white text-indigo-600 hover:bg-indigo-50'
@@ -133,7 +135,7 @@ const Pricing = () => {
                 }`}
               >
                 {plan.button}
-              </button>
+              </Link>
 
               {/* Divider */}
               <div
