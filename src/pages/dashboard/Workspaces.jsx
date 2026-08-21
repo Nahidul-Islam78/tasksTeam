@@ -2,7 +2,8 @@ import React, { useRef } from 'react';
 import useAuth from '../../hooks/useAuth';
 import useAxios from '../../hooks/useAxios';
 import { useQuery } from '@tanstack/react-query';
-import { ArrowRight, Building2, FolderPlus, MoreHorizontal, Plus,  X } from 'lucide-react';
+import { ArrowRight, Building2, FolderPlus,  MoreHorizontal, Plus,  X } from 'lucide-react';
+import { Link } from 'react-router';
 
 const Workspaces = () => {
   const { user } = useAuth();
@@ -107,16 +108,23 @@ const Workspaces = () => {
                 <div className="mt-5">
                   <h2 className="text-lg font-bold">{workspace.name}</h2>
                 </div>
-
-                {/* Button */}
-                <div className="mt-5">
-                  <button className="btn btn-outline btn-primary w-full gap-2">
-                    View Workspace
-                    <ArrowRight
-                      size={17}
-                      className="transition-transform group-hover:translate-x-1"
-                    />
-                  </button>
+                <div>
+                  <div className="mt-5 flex items-center justify-between">
+                    <Link
+                      state={{
+                        workspaceName: workspace.name,
+                        ownerEmail: workspace.ownerEmail,
+                      }}
+                      to={`/workspaces/${workspace._id}`}
+                      className="btn btn-outline btn-primary w-full gap-2"
+                    >
+                      View Workspace
+                      <ArrowRight
+                        size={16}
+                        className="transition-transform group-hover:translate-x-1"
+                      />
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>

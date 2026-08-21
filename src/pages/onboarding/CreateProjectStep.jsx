@@ -22,7 +22,6 @@ const CreateProjectStep = ({ finish, workspaceId,}) => {
           role: 'admin',
         };
         axios.post('/projectMembers', projectMember).then(res => {
-          console.log(res.data);
           finish();
         });
       }

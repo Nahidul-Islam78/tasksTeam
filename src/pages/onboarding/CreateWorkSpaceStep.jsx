@@ -34,7 +34,6 @@ const CreateWorkSpaceStep = ({ next, setWorkspaceId, setWorkspaceName }) => {
           role: 'admin',
         };
         axios.post('/workspaceMembers', workspaceMember).then(res => {
-          console.log(res.data);
           next();
         });
       }

@@ -9,7 +9,7 @@ const Naver = () => {
     logoutUser().then(() => {
       
     }).catch(error=>{
-      console.log(error);
+      
     })
   }
   return (

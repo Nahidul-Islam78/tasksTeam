@@ -19,14 +19,11 @@ const Signup = () => {
     createUser(data.email, data.password).then(user => {
       updateUser({ displayName: data.name, photoURL: null }).then(() => {
         axios.post(`/users`, data).then(res => {
-          console.log(res);
         });
         navigate('/onboarding');
       }).catch(error => {
-        console.log(error);
       })
     }).catch(error => {
-      console.log(error)
     })
   }
   return (

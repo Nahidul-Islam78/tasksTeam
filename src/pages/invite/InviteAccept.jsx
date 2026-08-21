@@ -8,7 +8,6 @@ const InviteAccept = () => {
   const userData = {};
   const navigate=useNavigate()
   axios.post(`/invitation/accept/${token}`, userData).then(res => {
-    console.log(res.data)
     navigate('/dashboard')
   })
 

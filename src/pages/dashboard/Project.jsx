@@ -146,6 +146,7 @@ const Project = () => {
                 <div className="mt-5 flex items-center justify-between">
                   <Link
                     state={{
+                      projectName:project.name,
                       workspaceId: project.workspaceId,
                       ownerEmail: project.ownerEmail,
                     }}

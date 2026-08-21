@@ -16,6 +16,7 @@ const ProjectKanbanBoard = () => {
   const location = useLocation();
   const workspaceId = location.state.workspaceId;
   const ownerEmail = location.state.ownerEmail;
+  const projectName = location.state.projectName;
 
   const existOwner = ownerEmail===user?.email
   //get columns
@@ -51,8 +52,12 @@ const ProjectKanbanBoard = () => {
   const handelTask=(e)=>{
     e.preventDefault();
     const title = e.target.title.value;
+    const description = e.target.description.value;
+    const priority = e.target.priority.value;
     const taskData = {
       title,
+      description,
+      priority,
       columnId,
       projectId:id
     }
@@ -82,7 +87,6 @@ const ProjectKanbanBoard = () => {
         .post('/projectMembers/member', projectMemberInfo)
         .then(res => {
           modalRef.current.close();
-          console.log(res.data);
         });
     };
 
@@ -100,7 +104,7 @@ const ProjectKanbanBoard = () => {
 
               <div>
                 <h1 className="text-xl font-bold text-slate-800 md:text-2xl">
-                  Website Redesign
+                  {projectName}
                 </h1>
 
                 <p className="text-sm text-slate-500">
@@ -202,7 +206,7 @@ const ProjectKanbanBoard = () => {
                         className="group cursor-pointer rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-md"
                       >
                         {/* Task Header */}
-                        <div className="flex items-start justify-between gap-3">
+                        <div className="flex  items-start justify-between gap-3">
                           <h3 className="font-semibold leading-5 text-slate-800">
                             {task.title}
                           </h3>
@@ -210,6 +214,11 @@ const ProjectKanbanBoard = () => {
                           <button className="rounded-lg p-1 text-slate-400 opacity-0 transition group-hover:opacity-100 hover:bg-slate-100 hover:text-slate-700">
                             ⋮
                           </button>
+                        </div>
+                        <div>
+                          <h3 className="font-semibold leading-5 text-slate-800">
+                            {task.description}
+                          </h3>
                         </div>
 
                         {/* Priority */}
@@ -222,38 +231,13 @@ const ProjectKanbanBoard = () => {
                             {task.priority}
                           </span>
                         </div>
-
-                        {/* Assignee */}
-                        <div className="mt-4 flex items-center gap-2">
-                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-100 text-xs font-bold text-indigo-600">
-                            {task.assignee?.charAt(0)?.toUpperCase() || 'U'}
-                          </div>
-
-                          <div>
-                            <p className="text-xs text-slate-400">
-                              Assigned to
-                            </p>
-
-                            <p className="text-sm font-medium text-slate-600">
-                              {task.assignee || 'Unassigned'}
-                            </p>
-                          </div>
-                        </div>
-
-                        {/* Divider */}
-                        <div className="my-4 border-t border-slate-100" />
-
                         {/* Task Footer */}
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-1.5 text-xs text-slate-400">
                             <span>📅</span>
 
-                            <span>{task.dueDate || 'No due date'}</span>
+                            <span>{task.createAt || 'No due date'}</span>
                           </div>
-
-                          <button className="rounded-lg px-2 py-1 text-xs text-slate-400 hover:bg-slate-100 hover:text-indigo-600">
-                            View
-                          </button>
                         </div>
                       </div>
                     ))}

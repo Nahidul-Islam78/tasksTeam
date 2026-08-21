@@ -186,6 +186,7 @@ const Dashboard = () => {
                   >
                     <Link
                       state={{
+                        projectName: project.name,
                         workspaceId: project.workspaceId,
                         ownerEmail: project.ownerEmail,
                       }}
@@ -228,7 +229,7 @@ const Dashboard = () => {
                     key={workspace.name}
                     className="rounded-xl border border-base-300 p-4 transition hover:bg-base-200"
                   >
-                    <Link to={`/workspaces/${workspace._id}`}>
+                    <Link state={{workspaceName:workspace.name,ownerEmail:workspace.ownerEmail}} to={`/workspaces/${workspace._id}`}>
                       <div className="flex items-start justify-between">
                         <div>
                           <h3 className="font-semibold">{workspace.name}</h3>
